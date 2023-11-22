@@ -1,10 +1,10 @@
 import 'package:mobx/mobx.dart';
 import 'package:notes_mobx/state/validation_response.dart';
 import 'package:dio/dio.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../constants/settings.dart';
 import 'data_structure.dart';
+import 'note.dart';
 
 part 'app_state.g.dart';
 
@@ -22,6 +22,17 @@ abstract class _AppState with Store {
 
   @observable
   Response? response;
+
+  @observable
+  ObservableList<Note> notes = ObservableList<Note>();
+
+  @computed
+  ObservableList<Note> get sortedNotes => ObservableList.of(notes.sorted());
+
+  @action
+  void goToNotes() {
+    currentScreen = AppScreen.notes;
+  }
 
   @action
   void goToGoogle() {
@@ -91,11 +102,9 @@ abstract class _AppState with Store {
         }
         break;
       }
-      print("validation $message");
       return ValidationResponse(
           status: status, data: DataStructure(message: message));
     } catch (_) {
-      print("validation 404");
       return const ValidationResponse(
           status: 404, data: DataStructure(message: ""));
     }
@@ -142,6 +151,12 @@ abstract class _AppState with Store {
       isLoading = false;
     }
   }
+}
+
+extension Sorted on List<Note> {
+  List<Note> sorted() => [...this]..sort((lhs, rhs) {
+      return lhs.lastModified.compareTo(rhs.lastModified);
+    });
 }
 
 enum AppScreen { login, notes, goog }
