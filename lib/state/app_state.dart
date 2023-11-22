@@ -1,6 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:notes_mobx/state/validation_response.dart';
 import 'package:dio/dio.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../constants/settings.dart';
 import 'data_structure.dart';
@@ -21,6 +22,16 @@ abstract class _AppState with Store {
 
   @observable
   Response? response;
+
+  @action
+  void goToGoogle() {
+    currentScreen = AppScreen.goog;
+  }
+
+  @action
+  void goToLogin() {
+    currentScreen = AppScreen.login;
+  }
 
   @action
   Future<void> initialize() async {
@@ -133,4 +144,4 @@ abstract class _AppState with Store {
   }
 }
 
-enum AppScreen { login, notes }
+enum AppScreen { login, notes, goog }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../constants/dimensions.dart';
 import '../../state/app_state.dart';
@@ -196,7 +197,7 @@ class LoginView extends HookWidget {
                 padding: EdgeInsets.only(bottom: Dimensions.height40),
                 child: GestureDetector(
                   onTap: () {
-                    print("qual");
+                    context.read<AppState>().goToGoogle();
                   },
                   child: Text('Política de Privacidade',
                       style: TextStyle(color: Colors.grey[200])),
