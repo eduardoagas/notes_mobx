@@ -10,11 +10,13 @@ Future<T?> showGenericDialog<T>({
 }) {
   final options = optionsBuilder();
   return showDialog<T>(
+    barrierColor: Colors.black54.withAlpha(24),
     context: context,
     builder: (context) {
       return AlertDialog(
         title: Text(title),
         content: Text(content),
+        backgroundColor: Colors.grey[100],
         actions: options.keys.map((optionTitle) {
           final value = options[optionTitle];
           return TextButton(
