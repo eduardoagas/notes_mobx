@@ -1,17 +1,18 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:equatable/equatable.dart';
+import 'package:notes_mobx/state/data_structure.dart';
 
 @immutable
 class ValidationResponse extends Equatable {
   final int status;
-  final String message;
+  final DataStructure data;
   const ValidationResponse({
     required this.status,
-    required this.message,
+    required this.data,
   });
 
   @override
   List<Object> get props {
-    return [status, message];
+    return [status, data];
   }
 }

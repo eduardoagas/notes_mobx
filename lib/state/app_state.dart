@@ -3,6 +3,7 @@ import 'package:notes_mobx/state/validation_response.dart';
 import 'package:dio/dio.dart';
 
 import '../constants/settings.dart';
+import 'data_structure.dart';
 
 part 'app_state.g.dart';
 
@@ -16,23 +17,16 @@ abstract class _AppState with Store {
   bool isLoading = false;
 
   @observable
-  Dio dio = Dio();
-
-  @observable
   bool? isLoggedIn;
 
   @observable
-  late Response response;
-
-  @observable
-  ValidationResponse? validationResponse;
+  Response? response;
 
   @action
   Future<void> initialize() async {
     isLoading = true;
     isLoggedIn = false; // get from shared preferences
     if (isLoggedIn == null || isLoggedIn == false) {
-      
       currentScreen = AppScreen.login;
     } else {
       await _loadNotes();
@@ -42,35 +36,21 @@ abstract class _AppState with Store {
   }
 
   @action
-  Future<bool> _loadReminders() async {
-    final userId = currentUser?.uid;
-    if (userId == null) {
-      return false;
-    }
-    final collection =
-        await FirebaseFirestore.instance.collection(userId).get();
-    final reminders = collection.docs.map((doc) => Reminder(
-          id: doc.id,
-          creationDate:
-              DateTime.parse(doc[_DocumentKeys.creationDate] as String),
-          isDone: doc[_DocumentKeys.isDone] as bool,
-          text: doc[_DocumentKeys.text] as String,
-        ));
-    this.reminders = ObservableList.of(reminders);
+  Future<bool> _loadNotes() async {
+    print("oi");
     return true;
   }
 
-  @action
-  void validate({
+  ValidationResponse validate({
     required String string,
   }) {
+    // ignore: unused_local_variable
     try {
       String message = "Sucesso!";
       int status = 200;
       while (true) {
-        if (!RegExp(r'[a-zA-Z0-9]/s]').hasMatch(string)) {
-          message =
-              "Por favor preencha os campos sem o uso de caracteres especiais";
+        if (string.isEmpty) {
+          message = "Por favor preencha todos os campos.";
           status = 422;
           break;
         }
@@ -86,6 +66,12 @@ abstract class _AppState with Store {
           status = 422;
           break;
         }
+        if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(string)) {
+          message =
+              "Por favor preencha os campos sem o uso de caracteres especiais";
+          status = 422;
+          break;
+        }
         if (string.endsWith(" ")) {
           message =
               "Por favor preencha os campos sem que o último caractere seja um espaço";
@@ -94,39 +80,41 @@ abstract class _AppState with Store {
         }
         break;
       }
-      validationResponse = ValidationResponse(status: status, message: message);
+      print("validation $message");
+      return ValidationResponse(
+          status: status, data: DataStructure(message: message));
     } catch (_) {
-      validationResponse = const ValidationResponse(status: 404, message: "");
+      print("validation 404");
+      return const ValidationResponse(
+          status: 404, data: DataStructure(message: ""));
     }
   }
 
   @action
-  Future<Response> process({
+  process({
     required String string,
   }) async {
+    Dio dio = Dio();
     isLoading = true;
 
     try {
       if (Settings.mockApi) {
-        validate(string: string);
-        if (validationResponse != null) {
-          dio.interceptors.add(
-            InterceptorsWrapper(
-              onRequest: (options, handler) {
-                return handler.resolve(
-                  Response(
-                      requestOptions: options,
-                      data: validationResponse?.message,
-                      statusCode: validationResponse?.status),
-                );
-              },
-            ),
-          );
-        }
+        ValidationResponse validationResponse = validate(string: string);
+        dio.interceptors.add(
+          InterceptorsWrapper(
+            onRequest: (options, handler) {
+              return handler.resolve(
+                Response(
+                    requestOptions: options,
+                    data: validationResponse.data,
+                    statusCode: validationResponse.status),
+              );
+            },
+          ),
+        );
       }
       response = await dio.get(Settings.validatorEndpoint,
           queryParameters: {Settings.validatorStringMapKey: string});
-      return response;
     } on DioException catch (e) {
       /*if (e.response != null) {
         print(e.response!.data);
@@ -136,10 +124,10 @@ abstract class _AppState with Store {
         print(e.requestOptions);
         print(e.message);
       }*/
-      return Response(
+      response = Response(
           requestOptions: e.requestOptions, data: e.message, statusCode: 400);
     } finally {
-      dio.interceptors.clear();
+      //dio.interceptors.clear();
       isLoading = false;
     }
   }

@@ -16,8 +16,7 @@ void main() {
           //remindersService: FirestoreRemindersService(),
           //imageUploadService: FirebaseImageUploadService(),
           )
-      //..initialize()
-      ,
+        ..initialize(),
       child: const App(),
     ),
   );
@@ -37,6 +36,7 @@ class App extends StatelessWidget {
         builder: (context) {
           return autorun(
             (_) {
+              print("autorrunning");
               // handle loading screen
               final isLoading = context.read<AppState>().isLoading;
               if (isLoading) {
@@ -48,12 +48,11 @@ class App extends StatelessWidget {
                 LoadingScreen.instance().hide();
               }
 
-              final validationResponse =
-                  context.read<AppState>().validationResponse;
-              if (validationResponse != null) {
-                if (validationResponse.status != 200) {
+              final response = context.read<AppState>().response;
+              if (response != null) {
+                if (response.statusCode != 200) {
                   showMessage(
-                    message: validationResponse.message,
+                    message: response.data.message,
                     context: context,
                   );
                 }

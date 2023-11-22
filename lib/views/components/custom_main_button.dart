@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../constants/dimensions.dart';
 import '../../utils/get_screen_size.dart';
 
 class CustomMainButton extends StatelessWidget {
@@ -21,15 +22,21 @@ class CustomMainButton extends StatelessWidget {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: color,
-            fixedSize: Size(screenSize.width * 0.50, screenSize.width * 0.13)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            maximumSize: Size(
+              Dimensions.width150,
+              Dimensions.height50,
+            ),
+            fixedSize: Size(screenSize.width * 0.50, screenSize.height * 0.06)),
         onPressed: onPressed,
         child: !isLoading
             ? child
-            : const AspectRatio(
+            : AspectRatio(
                 aspectRatio: 1 / 1,
                 child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    child: CircularProgressIndicator(
+                    padding: EdgeInsets.symmetric(vertical: Dimensions.width5),
+                    child: const CircularProgressIndicator(
                       color: Colors.white,
                     )),
               ));
