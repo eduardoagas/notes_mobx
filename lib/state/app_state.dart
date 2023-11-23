@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:mobx/mobx.dart';
 import 'package:notes_mobx/state/validation_response.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/settings.dart';
 import 'data_structure.dart';
@@ -28,6 +31,35 @@ abstract class _AppState with Store {
 
   @computed
   ObservableList<Note> get sortedNotes => ObservableList.of(notes.sorted());
+
+  Future<void> saveToPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    List<Map<String, dynamic>> notesData = sortedNotes
+        .map((note) => {
+              'id': note.id,
+              'lastModified': note.lastModified.toIso8601String(),
+              'text': note.text,
+            })
+        .toList();
+
+    prefs.setString('notes', notesData.toString());
+  }
+
+  Future<void> loadFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    String notesDataString = prefs.getString('notes') ?? "[]";
+    List<dynamic> notesData = json.decode(notesDataString);
+
+    notes = ObservableList<Note>.of(notesData.map((data) {
+      return Note(
+        id: data['id'],
+        lastModified: DateTime.tryParse(data['lastModified']) ?? DateTime.now(),
+        text: data['text'],
+      );
+    }));
+  }
 
   @action
   void goToNotes() {

@@ -30,4 +30,7 @@ abstract class _Note with Store {
         text,
         lastModified,
       );
+
 }
+
+
