@@ -23,7 +23,7 @@ class LoginView extends HookWidget {
                 end: Alignment.bottomCenter,
                 colors: <Color>[
               Color.fromARGB(255, 2, 37, 22),
-              Color.fromARGB(255, 16, 114, 82),
+              Color.fromARGB(255, 16, 114, 106),
             ])),
         child: Stack(
           children: [
@@ -114,8 +114,8 @@ class LoginView extends HookWidget {
                               ),
                               prefixIcon: Padding(
                                   padding: EdgeInsets.only(
-                                      left: Dimensions.height16,
-                                      top: Dimensions.font14),
+                                      left: Dimensions.width16,
+                                      top: Dimensions.font19),
                                   child: FaIcon(
                                     FontAwesomeIcons.lock,
                                     size: Dimensions.height15,
