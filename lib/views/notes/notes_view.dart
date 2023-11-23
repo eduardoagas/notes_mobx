@@ -14,7 +14,19 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
-  ScrollController textFieldScrollController = ScrollController();
+  //ScrollController textFieldScrollController = ScrollController();
+  FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        FocusScope.of(context).requestFocus(_focusNode);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,16 +67,20 @@ class _NotesViewState extends State<NotesView> {
                 start: Dimensions.screenWidth * 0.13,
                 child: TextField(
                   textAlign: TextAlign.center,
-                  scrollController: textFieldScrollController,
+                  //scrollController: textFieldScrollController,
                   autofocus: true,
-                  onTapOutside: (event) {},
-                  textInputAction: TextInputAction.newline,
-                  maxLines: null,
+                  //onTapOutside: (event) {},
+                  textInputAction: TextInputAction.none,
+                  focusNode: _focusNode,
+                  onSubmitted: (event) {
+                    print("ok");
+                  },
+                  /*maxLines: null,
                   minLines: 1,
                   onChanged: (value) {
                     textFieldScrollController.jumpTo(
                         textFieldScrollController.position.maxScrollExtent);
-                  },
+                  },*/
                   style: TextStyle(
                     fontSize: Dimensions.font17,
                   ),
