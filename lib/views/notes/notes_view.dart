@@ -14,8 +14,15 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
+  final noteController = TextEditingController();
   //ScrollController textFieldScrollController = ScrollController();
   FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    noteController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -66,6 +73,7 @@ class _NotesViewState extends State<NotesView> {
                 bottom: Dimensions.screenHeight * 0.08,
                 start: Dimensions.screenWidth * 0.13,
                 child: TextField(
+                  controller: noteController,
                   textAlign: TextAlign.center,
                   //scrollController: textFieldScrollController,
                   autofocus: true,
@@ -73,7 +81,8 @@ class _NotesViewState extends State<NotesView> {
                   textInputAction: TextInputAction.none,
                   focusNode: _focusNode,
                   onSubmitted: (event) {
-                    print("ok");
+                    //print("oi");
+                    context.read<AppState>().createNote(noteController.text);
                   },
                   /*maxLines: null,
                   minLines: 1,

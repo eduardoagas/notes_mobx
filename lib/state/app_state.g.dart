@@ -49,22 +49,6 @@ mixin _$AppState on _AppState, Store {
     });
   }
 
-  late final _$isLoggedInAtom =
-      Atom(name: '_AppState.isLoggedIn', context: context);
-
-  @override
-  bool? get isLoggedIn {
-    _$isLoggedInAtom.reportRead();
-    return super.isLoggedIn;
-  }
-
-  @override
-  set isLoggedIn(bool? value) {
-    _$isLoggedInAtom.reportWrite(value, super.isLoggedIn, () {
-      super.isLoggedIn = value;
-    });
-  }
-
   late final _$responseAtom =
       Atom(name: '_AppState.response', context: context);
 
@@ -102,14 +86,6 @@ mixin _$AppState on _AppState, Store {
   @override
   Future<void> initialize() {
     return _$initializeAsyncAction.run(() => super.initialize());
-  }
-
-  late final _$_loadNotesAsyncAction =
-      AsyncAction('_AppState._loadNotes', context: context);
-
-  @override
-  Future<bool> _loadNotes() {
-    return _$_loadNotesAsyncAction.run(() => super._loadNotes());
   }
 
   late final _$processAsyncAction =
@@ -161,7 +137,6 @@ mixin _$AppState on _AppState, Store {
     return '''
 currentScreen: ${currentScreen},
 isLoading: ${isLoading},
-isLoggedIn: ${isLoggedIn},
 response: ${response},
 notes: ${notes},
 sortedNotes: ${sortedNotes}

@@ -16,7 +16,7 @@ class NotesListView extends StatelessWidget {
           itemCount: appState.sortedNotes.length,
           itemBuilder: (context, index) {
             return NoteTile(
-              reminderIndex: index,
+              noteIndex: index,
             );
           },
         );

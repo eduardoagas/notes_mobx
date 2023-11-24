@@ -7,26 +7,25 @@ import '../../constants/dimensions.dart';
 import '../../state/app_state.dart';
 
 class NoteTile extends StatelessWidget {
-  final int reminderIndex;
+  final int noteIndex;
 
   const NoteTile({
     Key? key,
-    required this.reminderIndex,
+    required this.noteIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
-    final reminder = appState.sortedNotes[reminderIndex];
+    final note = appState.sortedNotes[noteIndex];
     return Observer(
       builder: (context) {
         return ListTile(
-          
           title: Row(
             children: [
               Expanded(
                 child: Text(
-                  reminder.text,
+                  note.text,
                 ),
               ),
               IconButton(

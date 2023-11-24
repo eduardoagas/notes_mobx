@@ -173,10 +173,9 @@ class LoginView extends HookWidget {
                                 }
                               }
                               if (context.mounted) {
-                                context.read<AppState>().isLoggedIn = true;
-                                context.read<AppState>().goToNotes();
+                                // context.read<AppState>().isLoggedIn = true;
+                                context.read<AppState>().initialize();
                               }
-                              ;
                             } catch (_) {
                             } finally {
                               if (context.mounted) {

@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/settings.dart';
 import 'data_structure.dart';
 import 'note.dart';
+import 'package:uuid/uuid.dart';
 
 part 'app_state.g.dart';
 
@@ -20,11 +21,14 @@ abstract class _AppState with Store {
   @observable
   bool isLoading = false;
 
-  @observable
-  bool? isLoggedIn;
+  // @observable
+  // bool? isLoggedIn;
 
   @observable
   Response? response;
+
+  @observable
+  ObservableList<String> keys = ObservableList<String>();
 
   @observable
   ObservableList<Note> notes = ObservableList<Note>();
@@ -32,33 +36,51 @@ abstract class _AppState with Store {
   @computed
   ObservableList<Note> get sortedNotes => ObservableList.of(notes.sorted());
 
-  Future<void> saveToPrefs() async {
+  @action
+  Future<void> createNote(String text) async {
+    isLoading = true;
     final prefs = await SharedPreferences.getInstance();
+    final id = const Uuid().v1();
+    final lastModified = DateTime.now();
 
-    List<Map<String, dynamic>> notesData = sortedNotes
-        .map((note) => {
-              'id': note.id,
-              'lastModified': note.lastModified.toIso8601String(),
-              'text': note.text,
-            })
-        .toList();
+    final newNote = {
+      'id': id,
+      'lastModified': lastModified.toIso8601String(),
+      'text': text,
+    };
 
-    prefs.setString('notes', notesData.toString());
+    await prefs.setString(id, newNote.toString());
+    keys.add(id);
+    await prefs.setStringList('keys', keys);
+
+    final note = Note(
+      id: id,
+      lastModified: lastModified,
+      text: text,
+    );
+    notes.add(note);
+    isLoading = false;
   }
 
-  Future<void> loadFromPrefs() async {
+  @action
+  Future<void> loadNotes() async {
+    isLoading = true;
     final prefs = await SharedPreferences.getInstance();
+    final stringListkeys = prefs.getStringList('keys') ?? [];
+    keys.addAll(stringListkeys);
+    final notesDataStringList =
+        keys.map((key) => prefs.getString(key) ?? "[]").toList();
 
-    String notesDataString = prefs.getString('notes') ?? "[]";
-    List<dynamic> notesData = json.decode(notesDataString);
+    notesDataStringList.map((notesDataString) {
+      final data = json.decode(notesDataString);
 
-    notes = ObservableList<Note>.of(notesData.map((data) {
-      return Note(
+      notes.add(Note(
         id: data['id'],
         lastModified: DateTime.tryParse(data['lastModified']) ?? DateTime.now(),
         text: data['text'],
-      );
-    }));
+      ));
+    });
+    isLoading = false;
   }
 
   @action
@@ -79,20 +101,14 @@ abstract class _AppState with Store {
   @action
   Future<void> initialize() async {
     isLoading = true;
-    isLoggedIn = false; // get from shared preferences
-    if (isLoggedIn == null || isLoggedIn == false) {
-      currentScreen = AppScreen.login;
-    } else {
-      await _loadNotes();
-      currentScreen = AppScreen.notes;
-    }
+    //isLoggedIn = false; // get from shared preferences
+    //if (isLoggedIn == null || isLoggedIn == false) {
+    //  currentScreen = AppScreen.login;
+    //} else {
+    await loadNotes();
+    currentScreen = AppScreen.notes;
+    //}
     isLoading = false;
-  }
-
-  @action
-  Future<bool> _loadNotes() async {
-    print("oi");
-    return true;
   }
 
   ValidationResponse validate({
