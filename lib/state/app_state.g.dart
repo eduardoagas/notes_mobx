@@ -64,6 +64,22 @@ mixin _$AppState on _AppState, Store {
     });
   }
 
+  late final _$lastScreenAtom =
+      Atom(name: '_AppState.lastScreen', context: context);
+
+  @override
+  AppScreen get lastScreen {
+    _$lastScreenAtom.reportRead();
+    return super.lastScreen;
+  }
+
+  @override
+  set lastScreen(AppScreen value) {
+    _$lastScreenAtom.reportWrite(value, super.lastScreen, () {
+      super.lastScreen = value;
+    });
+  }
+
   late final _$editAtom = Atom(name: '_AppState.edit', context: context);
 
   @override
@@ -211,6 +227,7 @@ mixin _$AppState on _AppState, Store {
 currentScreen: ${currentScreen},
 isLoading: ${isLoading},
 enter: ${enter},
+lastScreen: ${lastScreen},
 edit: ${edit},
 response: ${response},
 keys: ${keys},

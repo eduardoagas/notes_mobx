@@ -25,6 +25,9 @@ abstract class _AppState with Store {
   bool enter = false;
 
   @observable
+  AppScreen lastScreen = AppScreen.login;
+
+  @observable
   Note? edit;
 
   @observable
@@ -156,6 +159,7 @@ abstract class _AppState with Store {
 
   @action
   void goToGoogle() {
+    lastScreen = currentScreen;
     currentScreen = AppScreen.goog;
   }
 

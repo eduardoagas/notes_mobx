@@ -25,10 +25,19 @@ class GoogleView extends StatelessWidget {
       ..loadRequest(Uri.parse('https://google.com'));
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Política de Privacidade'),
+        title: Text(
+          'Política de Privacidade',
+          style: TextStyle(
+            color: Colors.grey[200],
+          ),
+        ),
         leading: IconButton(
           onPressed: () {
-            context.read<AppState>().goToLogin();
+            if (context.read<AppState>().lastScreen == AppScreen.notes) {
+              context.read<AppState>().enter = false;
+            }
+            context.read<AppState>().currentScreen =
+                context.read<AppState>().lastScreen;
           },
           icon: const Icon(Icons.arrow_back),
         ),
