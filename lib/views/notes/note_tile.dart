@@ -17,7 +17,7 @@ class NoteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final appState = context.read<AppState>();
     final note = appState.sortedNotes[noteIndex];
     return Observer(
       builder: (context) {

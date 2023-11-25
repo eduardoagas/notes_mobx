@@ -48,7 +48,6 @@ abstract class _AppState with Store {
     }
   }
 
-  @action
   String getEditUuid() {
     if (edit != null) {
       return edit!.uuid;
@@ -56,7 +55,6 @@ abstract class _AppState with Store {
     return '';
   }
 
-  @action
   Color? getEditColor(BuildContext context, String uuid) {
     if (edit != null) {
       if (edit?.uuid == uuid) return Colors.green;

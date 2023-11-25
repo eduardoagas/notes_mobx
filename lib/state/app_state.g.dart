@@ -173,28 +173,6 @@ mixin _$AppState on _AppState, Store {
   }
 
   @override
-  String getEditUuid() {
-    final _$actionInfo =
-        _$_AppStateActionController.startAction(name: '_AppState.getEditUuid');
-    try {
-      return super.getEditUuid();
-    } finally {
-      _$_AppStateActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Color? getEditColor(BuildContext context, String uuid) {
-    final _$actionInfo =
-        _$_AppStateActionController.startAction(name: '_AppState.getEditColor');
-    try {
-      return super.getEditColor(context, uuid);
-    } finally {
-      _$_AppStateActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void goToNotes() {
     final _$actionInfo =
         _$_AppStateActionController.startAction(name: '_AppState.goToNotes');
