@@ -87,6 +87,7 @@ class _NotesViewState extends State<NotesView> {
                     //textInputAction: TextInputAction.done,
                     focusNode: _focusNode,
                     onSubmitted: (event) async {
+                      enter = false;
                       if (noteController.text.isNotEmpty) {
                         await context
                             .read<AppState>()

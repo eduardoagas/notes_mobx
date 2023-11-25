@@ -58,7 +58,6 @@ class App extends StatelessWidget {
         child: Observer(
           name: "CurrentScreen",
           builder: (context) {
-            print(context.read<AppState>().currentScreen.toString());
             switch (context.read<AppState>().currentScreen) {
               case AppScreen.login:
                 return const LoginView();
