@@ -64,6 +64,21 @@ mixin _$AppState on _AppState, Store {
     });
   }
 
+  late final _$editAtom = Atom(name: '_AppState.edit', context: context);
+
+  @override
+  Note? get edit {
+    _$editAtom.reportRead();
+    return super.edit;
+  }
+
+  @override
+  set edit(Note? value) {
+    _$editAtom.reportWrite(value, super.edit, () {
+      super.edit = value;
+    });
+  }
+
   late final _$responseAtom =
       Atom(name: '_AppState.response', context: context);
 
@@ -110,12 +125,21 @@ mixin _$AppState on _AppState, Store {
     });
   }
 
-  late final _$createNoteAsyncAction =
-      AsyncAction('_AppState.createNote', context: context);
+  late final _$createOrEditNoteAsyncAction =
+      AsyncAction('_AppState.createOrEditNote', context: context);
 
   @override
-  Future<void> createNote(String text) {
-    return _$createNoteAsyncAction.run(() => super.createNote(text));
+  Future<void> createOrEditNote(String text) {
+    return _$createOrEditNoteAsyncAction
+        .run(() => super.createOrEditNote(text));
+  }
+
+  late final _$deleteAsyncAction =
+      AsyncAction('_AppState.delete', context: context);
+
+  @override
+  Future<bool> delete(Note note) {
+    return _$deleteAsyncAction.run(() => super.delete(note));
   }
 
   late final _$loadNotesAsyncAction =
@@ -136,6 +160,39 @@ mixin _$AppState on _AppState, Store {
 
   late final _$_AppStateActionController =
       ActionController(name: '_AppState', context: context);
+
+  @override
+  dynamic editModeOnOff(Note note) {
+    final _$actionInfo = _$_AppStateActionController.startAction(
+        name: '_AppState.editModeOnOff');
+    try {
+      return super.editModeOnOff(note);
+    } finally {
+      _$_AppStateActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  String getEditUuid() {
+    final _$actionInfo =
+        _$_AppStateActionController.startAction(name: '_AppState.getEditUuid');
+    try {
+      return super.getEditUuid();
+    } finally {
+      _$_AppStateActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Color? getEditColor(BuildContext context, String uuid) {
+    final _$actionInfo =
+        _$_AppStateActionController.startAction(name: '_AppState.getEditColor');
+    try {
+      return super.getEditColor(context, uuid);
+    } finally {
+      _$_AppStateActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void goToNotes() {
@@ -176,6 +233,7 @@ mixin _$AppState on _AppState, Store {
 currentScreen: ${currentScreen},
 isLoading: ${isLoading},
 enter: ${enter},
+edit: ${edit},
 response: ${response},
 keys: ${keys},
 notes: ${notes},

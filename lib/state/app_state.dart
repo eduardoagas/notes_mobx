@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:notes_mobx/state/validation_response.dart';
 import 'package:dio/dio.dart';
@@ -24,6 +25,9 @@ abstract class _AppState with Store {
   bool enter = false;
 
   @observable
+  Note? edit;
+
+  @observable
   Response? response;
 
   @observable
@@ -36,10 +40,42 @@ abstract class _AppState with Store {
   ObservableList<Note> get sortedNotes => ObservableList.of(notes.sorted());
 
   @action
-  Future<void> createNote(String text) async {
+  editModeOnOff(Note note) {
+    if (edit != null) {
+      edit = null;
+    } else {
+      edit = note;
+    }
+  }
+
+  @action
+  String getEditUuid() {
+    if (edit != null) {
+      return edit!.uuid;
+    }
+    return '';
+  }
+
+  @action
+  Color? getEditColor(BuildContext context, String uuid) {
+    if (edit != null) {
+      if (edit?.uuid == uuid) return Colors.green;
+    }
+    return IconTheme.of(context).color;
+  }
+
+  String getEditText() {
+    if (edit != null) {
+      return edit!.text;
+    }
+    return '';
+  }
+
+  @action
+  Future<void> createOrEditNote(String text) async {
     isLoading = true;
     final prefs = await SharedPreferences.getInstance();
-    final uuid = const Uuid().v1();
+    final String uuid = (edit != null) ? edit!.uuid : const Uuid().v1();
     final lastModified = DateTime.now();
 
     final newNote = {
@@ -49,29 +85,47 @@ abstract class _AppState with Store {
     };
 
     await prefs.setString(uuid, jsonEncode(newNote));
-    keys.add(uuid);
-    List<String> keysStringList = [];
-    for (var key in keys) {
-      keysStringList.add(key);
+    if (edit == null) {
+      keys.add(uuid);
+      List<String> keysStringList = [];
+      for (var key in keys) {
+        keysStringList.add(key);
+      }
+      await prefs.setStringList('keys', keysStringList);
     }
-    await prefs.setStringList('keys', keysStringList);
 
     final note = Note(
       uuid: uuid,
       lastModified: lastModified,
       text: text,
     );
+    if (edit != null) {
+      notes.removeWhere((element) => element.uuid == edit?.uuid);
+      editModeOnOff(note);
+    }
+
     notes.add(note);
     isLoading = false;
   }
 
   @action
+  Future<bool> delete(Note note) async {
+    isLoading = true;
+    final prefs = await SharedPreferences.getInstance();
+    keys.removeWhere((element) => element == note.uuid);
+    final stringListKeys = List<String>.from(keys);
+    prefs.setStringList('keys', stringListKeys);
+    await prefs.remove(note.uuid);
+    notes.removeWhere((element) => element.uuid == note.uuid);
+    isLoading = false;
+    return true;
+  }
+
+  @action
   Future<void> loadNotes() async {
     isLoading = true;
-    print("before clear" + notes.toString());
     notes = ObservableList.of([]);
     keys = ObservableList.of([]);
-    print("after clear" + notes.toString());
     final prefs = await SharedPreferences.getInstance();
     final stringListKeys = prefs.getStringList('keys') ?? [];
     if (stringListKeys.isNotEmpty) {

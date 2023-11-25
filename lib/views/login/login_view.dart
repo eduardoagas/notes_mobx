@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:notes_mobx/extensions/if_debugging.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -13,8 +14,12 @@ class LoginView extends HookWidget {
   const LoginView({super.key});
   @override
   Widget build(BuildContext context) {
-    final userController = useTextEditingController();
-    final passwordController = useTextEditingController();
+    final userController = useTextEditingController(
+      text: 'user'.ifDebugging,
+    );
+    final passwordController = useTextEditingController(
+      text: 'senha'.ifDebugging,
+    );
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -58,6 +63,11 @@ class LoginView extends HookWidget {
                             bottom: Dimensions.height5),
                         child: TextField(
                           textAlignVertical: TextAlignVertical.top,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Dimensions.font16,
+                          ),
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
@@ -66,6 +76,7 @@ class LoginView extends HookWidget {
                                 Icons.person,
                                 color: Colors.black,
                               ),
+
                               //labelText: "Usuário",
 
                               constraints: BoxConstraints(
@@ -105,6 +116,11 @@ class LoginView extends HookWidget {
                         child: TextField(
                           textAlignVertical: TextAlignVertical.top,
                           obscureText: true,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Dimensions.font16,
+                          ),
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,

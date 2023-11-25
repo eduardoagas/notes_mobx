@@ -6,6 +6,8 @@ import '../../constants/dimensions.dart';
 import '../../state/app_state.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
+import 'notes_text_field.dart';
+
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
 
@@ -14,16 +16,11 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
-  final noteController = TextEditingController();
   //ScrollController textFieldScrollController = ScrollController();
   late FocusNode _focusNode;
   bool enter = false;
 
-  @override
-  void dispose() {
-    noteController.dispose();
-    super.dispose();
-  }
+ 
 
   @override
   void initState() {
@@ -31,10 +28,15 @@ class _NotesViewState extends State<NotesView> {
     super.initState();
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
-        noteController.clear();
+        //noteController.clear();
         FocusScope.of(context).requestFocus(_focusNode);
       }
     });
+    /*noteController.addListener(() {
+      if (context.read<AppState>().edit != null) {
+        noteController.text = context.read<AppState>().edit!.text;
+      }
+    });*/
   }
 
   @override
@@ -43,7 +45,6 @@ class _NotesViewState extends State<NotesView> {
       if (!visible && context.read<AppState>().enter) {
         context.read<AppState>().goToLogin();
       }
-      context.read<AppState>().enter = true;
       return Scaffold(
         body: SafeArea(
           child: Container(
@@ -78,59 +79,7 @@ class _NotesViewState extends State<NotesView> {
                 PositionedDirectional(
                   bottom: Dimensions.screenHeight * 0.08,
                   start: Dimensions.screenWidth * 0.13,
-                  child: TextField(
-                    controller: noteController,
-                    textAlign: TextAlign.center,
-                    //scrollController: textFieldScrollController,
-                    autofocus: true,
-                    //onTapOutside: (event) {},
-                    //textInputAction: TextInputAction.done,
-                    focusNode: _focusNode,
-                    onSubmitted: (event) async {
-                      context.read<AppState>().enter = false;
-                      if (noteController.text.isNotEmpty) {
-                        await context
-                            .read<AppState>()
-                            .createNote(noteController.text);
-                        noteController.clear();
-                      }
-                    },
-                    /*maxLines: null,
-                    minLines: 1,
-                    onChanged: (value) {
-                      textFieldScrollController.jumpTo(
-                          textFieldScrollController.position.maxScrollExtent);
-                    },*/
-                    style: TextStyle(
-                      fontSize: Dimensions.font17,
-                    ),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      constraints: BoxConstraints(
-                        maxWidth: Dimensions.screenWidth * 0.74,
-                        maxHeight: Dimensions.height70,
-                      ),
-                      border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      hintStyle: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Dimensions.font16,
-                      ),
-                      hintText: "Digite seu texto",
-                      /*label: Center(
-                      child: Text(
-                        "Digite seu texto",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: Dimensions.font16,
-                        ),
-                      ),
-                    ),*/
-                    ),
-                  ),
+                  child: NotesTextField(focusNode: _focusNode),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,

@@ -20,7 +20,7 @@ class NotesListView extends StatelessWidget {
                 NoteTile(
                   noteIndex: index,
                 ),
-                Divider(),
+                const Divider(),
               ],
             );
           },
