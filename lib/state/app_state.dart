@@ -122,6 +122,7 @@ abstract class _AppState with Store {
   @action
   Future<void> loadNotes() async {
     isLoading = true;
+    enter = false;
     notes = ObservableList.of([]);
     keys = ObservableList.of([]);
     final prefs = await SharedPreferences.getInstance();

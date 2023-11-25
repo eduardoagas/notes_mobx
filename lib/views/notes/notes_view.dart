@@ -18,9 +18,6 @@ class NotesView extends StatefulWidget {
 class _NotesViewState extends State<NotesView> {
   //ScrollController textFieldScrollController = ScrollController();
   late FocusNode _focusNode;
-  bool enter = false;
-
- 
 
   @override
   void initState() {

@@ -53,12 +53,14 @@ class NoteTile extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () async {
+                  appState.enter = false;
                   final shouldDeleteNote = await showDeleteNoteDialog(context);
                   if (shouldDeleteNote) {
                     if (context.mounted) {
                       context.read<AppState>().delete(note);
                     }
                   }
+                  appState.goToNotes();
                 },
                 icon: FaIcon(
                   FontAwesomeIcons.solidCircleXmark,
