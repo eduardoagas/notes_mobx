@@ -9,7 +9,6 @@ import '../constants/settings.dart';
 import 'data_structure.dart';
 import 'note.dart';
 import 'package:uuid/uuid.dart';
-
 part 'app_state.g.dart';
 
 class AppState = _AppState with _$AppState;
@@ -40,21 +39,25 @@ abstract class _AppState with Store {
   Future<void> createNote(String text) async {
     isLoading = true;
     final prefs = await SharedPreferences.getInstance();
-    final id = const Uuid().v1();
+    final uuid = const Uuid().v1();
     final lastModified = DateTime.now();
 
     final newNote = {
-      'id': id,
+      'uuid': uuid,
       'lastModified': lastModified.toIso8601String(),
       'text': text,
     };
 
-    await prefs.setString(id, newNote.toString());
-    keys.add(id);
-    await prefs.setStringList('keys', keys);
+    await prefs.setString(uuid, jsonEncode(newNote));
+    keys.add(uuid);
+    List<String> keysStringList = [];
+    for (var key in keys) {
+      keysStringList.add(key);
+    }
+    await prefs.setStringList('keys', keysStringList);
 
     final note = Note(
-      id: id,
+      uuid: uuid,
       lastModified: lastModified,
       text: text,
     );
@@ -65,21 +68,31 @@ abstract class _AppState with Store {
   @action
   Future<void> loadNotes() async {
     isLoading = true;
+    print("before clear" + notes.toString());
+    notes = ObservableList.of([]);
+    keys = ObservableList.of([]);
+    print("after clear" + notes.toString());
     final prefs = await SharedPreferences.getInstance();
-    final stringListkeys = prefs.getStringList('keys') ?? [];
-    keys.addAll(stringListkeys);
-    final notesDataStringList =
-        keys.map((key) => prefs.getString(key) ?? "[]").toList();
+    final stringListKeys = prefs.getStringList('keys') ?? [];
+    if (stringListKeys.isNotEmpty) {
+      keys.addAll(stringListKeys);
+      List<Note> notesList = [];
+      for (var key in keys) {
+        final encodedData = prefs.getString(key) ?? "";
+        if (encodedData.isNotEmpty) {
+          final data = jsonDecode(encodedData);
+          final note = Note(
+            lastModified: DateTime.parse(data['lastModified'] as String),
+            text: data['text'] as String,
+            uuid: data['uuid'] as String,
+          );
+          notesList.add(note);
+        }
+      }
+      notes = ObservableList.of(notesList);
+    }
 
-    notesDataStringList.map((notesDataString) {
-      final data = json.decode(notesDataString);
-
-      notes.add(Note(
-        id: data['id'],
-        lastModified: DateTime.tryParse(data['lastModified']) ?? DateTime.now(),
-        text: data['text'],
-      ));
-    });
+    currentScreen = AppScreen.notes;
     isLoading = false;
   }
 
@@ -96,19 +109,6 @@ abstract class _AppState with Store {
   @action
   void goToLogin() {
     currentScreen = AppScreen.login;
-  }
-
-  @action
-  Future<void> initialize() async {
-    isLoading = true;
-    //isLoggedIn = false; // get from shared preferences
-    //if (isLoggedIn == null || isLoggedIn == false) {
-    //  currentScreen = AppScreen.login;
-    //} else {
-    await loadNotes();
-    currentScreen = AppScreen.notes;
-    //}
-    isLoading = false;
   }
 
   ValidationResponse validate({
@@ -203,7 +203,7 @@ abstract class _AppState with Store {
 
 extension Sorted on List<Note> {
   List<Note> sorted() => [...this]..sort((lhs, rhs) {
-      return lhs.lastModified.compareTo(rhs.lastModified);
+      return rhs.lastModified.compareTo(lhs.lastModified); //descending
     });
 }
 

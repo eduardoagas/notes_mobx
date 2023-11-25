@@ -5,7 +5,7 @@ import '../../state/app_state.dart';
 import 'note_tile.dart';
 
 class NotesListView extends StatelessWidget {
-  const NotesListView({Key? key}) : super(key: key);
+  const NotesListView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,13 @@ class NotesListView extends StatelessWidget {
         return ListView.builder(
           itemCount: appState.sortedNotes.length,
           itemBuilder: (context, index) {
-            return NoteTile(
-              noteIndex: index,
+            return Column(
+              children: [
+                NoteTile(
+                  noteIndex: index,
+                ),
+                Divider(),
+              ],
             );
           },
         );

@@ -10,9 +10,9 @@ class NoteTile extends StatelessWidget {
   final int noteIndex;
 
   const NoteTile({
-    Key? key,
+    super.key,
     required this.noteIndex,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,36 +28,51 @@ class NoteTile extends StatelessWidget {
                   note.text,
                 ),
               ),
-              IconButton(
-                onPressed: () async {
-                  /*final shouldDeleteReminder =
-                      await showDeleteReminderDialog(context);
-                  if (shouldDeleteReminder) {
-                    if (context.mounted) {
-                      context.read<AppState>().delete(reminder);
-                    }
-                  }*/
-                },
-                icon: const Icon(
-                  Icons.drive_file_rename_outline_sharp,
+              SizedBox(
+                width: Dimensions.width10,
+                child: IconButton(
+                  onPressed: () async {
+                    /*final shouldDeleteReminder =
+                        await showDeleteReminderDialog(context);
+                    if (shouldDeleteReminder) {
+                      if (context.mounted) {
+                        context.read<AppState>().delete(reminder);
+                      }
+                    }*/
+                  },
+                  icon: Icon(
+                    Icons.drive_file_rename_outline_sharp,
+                    size: Dimensions.height30,
+                  ),
                 ),
               ),
-              IconButton(
-                onPressed: () async {
-                  /*final shouldDeleteReminder =
-                      await showDeleteReminderDialog(context);
-                  if (shouldDeleteReminder) {
-                    if (context.mounted) {
-                      context.read<AppState>().delete(reminder);
-                    }
-                  }*/
-                },
-                icon: FaIcon(
-                  FontAwesomeIcons.circleXmark,
-                  size: Dimensions.height15,
-                  color: Colors.grey[900],
+              SizedBox(
+                width: 25,
+              ),
+              SizedBox(
+                width: Dimensions.width10,
+                child: Center(
+                  child: IconButton(
+                    onPressed: () async {
+                      /*final shouldDeleteReminder =
+                          await showDeleteReminderDialog(context);
+                      if (shouldDeleteReminder) {
+                        if (context.mounted) {
+                          context.read<AppState>().delete(reminder);
+                        }
+                      }*/
+                    },
+                    icon: FaIcon(
+                      FontAwesomeIcons.circleXmark,
+                      size: Dimensions.height24,
+                      color: Colors.grey[900],
+                    ),
+                  ),
                 ),
-              )
+              ),
+              SizedBox(
+                width: 5,
+              ),
             ],
           ),
         );

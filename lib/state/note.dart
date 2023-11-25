@@ -5,7 +5,7 @@ part 'note.g.dart';
 class Note = _Note with _$Note;
 
 abstract class _Note with Store {
-  final String id;
+  final String uuid;
 
   @observable
   DateTime lastModified;
@@ -13,20 +13,20 @@ abstract class _Note with Store {
   String text;
 
   _Note({
-    required this.id,
+    required this.uuid,
     required this.lastModified,
     required this.text,
   });
 
   @override
   bool operator ==(covariant _Note other) =>
-      id == other.id &&
+      uuid == other.uuid &&
       text == other.text &&
       lastModified == other.lastModified;
 
   @override
   int get hashCode => Object.hash(
-        id,
+        uuid,
         text,
         lastModified,
       );

@@ -65,6 +65,21 @@ mixin _$AppState on _AppState, Store {
     });
   }
 
+  late final _$keysAtom = Atom(name: '_AppState.keys', context: context);
+
+  @override
+  ObservableList<String> get keys {
+    _$keysAtom.reportRead();
+    return super.keys;
+  }
+
+  @override
+  set keys(ObservableList<String> value) {
+    _$keysAtom.reportWrite(value, super.keys, () {
+      super.keys = value;
+    });
+  }
+
   late final _$notesAtom = Atom(name: '_AppState.notes', context: context);
 
   @override
@@ -80,12 +95,20 @@ mixin _$AppState on _AppState, Store {
     });
   }
 
-  late final _$initializeAsyncAction =
-      AsyncAction('_AppState.initialize', context: context);
+  late final _$createNoteAsyncAction =
+      AsyncAction('_AppState.createNote', context: context);
 
   @override
-  Future<void> initialize() {
-    return _$initializeAsyncAction.run(() => super.initialize());
+  Future<void> createNote(String text) {
+    return _$createNoteAsyncAction.run(() => super.createNote(text));
+  }
+
+  late final _$loadNotesAsyncAction =
+      AsyncAction('_AppState.loadNotes', context: context);
+
+  @override
+  Future<void> loadNotes() {
+    return _$loadNotesAsyncAction.run(() => super.loadNotes());
   }
 
   late final _$processAsyncAction =
@@ -138,6 +161,7 @@ mixin _$AppState on _AppState, Store {
 currentScreen: ${currentScreen},
 isLoading: ${isLoading},
 response: ${response},
+keys: ${keys},
 notes: ${notes},
 sortedNotes: ${sortedNotes}
     ''';
