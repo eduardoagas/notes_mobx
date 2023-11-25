@@ -20,8 +20,8 @@ abstract class _AppState with Store {
   @observable
   bool isLoading = false;
 
-  // @observable
-  // bool? isLoggedIn;
+  @observable
+  bool enter = false;
 
   @observable
   Response? response;

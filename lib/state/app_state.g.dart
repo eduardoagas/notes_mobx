@@ -49,6 +49,21 @@ mixin _$AppState on _AppState, Store {
     });
   }
 
+  late final _$enterAtom = Atom(name: '_AppState.enter', context: context);
+
+  @override
+  bool get enter {
+    _$enterAtom.reportRead();
+    return super.enter;
+  }
+
+  @override
+  set enter(bool value) {
+    _$enterAtom.reportWrite(value, super.enter, () {
+      super.enter = value;
+    });
+  }
+
   late final _$responseAtom =
       Atom(name: '_AppState.response', context: context);
 
@@ -160,6 +175,7 @@ mixin _$AppState on _AppState, Store {
     return '''
 currentScreen: ${currentScreen},
 isLoading: ${isLoading},
+enter: ${enter},
 response: ${response},
 keys: ${keys},
 notes: ${notes},

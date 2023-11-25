@@ -31,7 +31,6 @@ class _NotesViewState extends State<NotesView> {
     super.initState();
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
-        enter = true;
         noteController.clear();
         FocusScope.of(context).requestFocus(_focusNode);
       }
@@ -41,9 +40,10 @@ class _NotesViewState extends State<NotesView> {
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(builder: (context, visible) {
-      if (!visible && enter) {
+      if (!visible && context.read<AppState>().enter) {
         context.read<AppState>().goToLogin();
       }
+      context.read<AppState>().enter = true;
       return Scaffold(
         body: SafeArea(
           child: Container(
@@ -87,7 +87,7 @@ class _NotesViewState extends State<NotesView> {
                     //textInputAction: TextInputAction.done,
                     focusNode: _focusNode,
                     onSubmitted: (event) async {
-                      enter = false;
+                      context.read<AppState>().enter = false;
                       if (noteController.text.isNotEmpty) {
                         await context
                             .read<AppState>()
