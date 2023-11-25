@@ -6,7 +6,7 @@ Este aplicativo foi desenvolvido seguindo os requisitos da prova do processo sel
 # Tela de login
 
 
-<img src="images/login.png" alt="Your Image" width="196" height="390">
+<center><img src="images/login.png" alt="Your Image" width="196" height="390"></center>
 
 A tela de Login é a primeira tela do aplicativo. Se estiver em **modo debug** ela carregará já com os campos *Usuário* e *Senha* preenchidos. Cumprindo os requisitos da prova, esta tela **não registra um usuário**, ou seja, os dados dos campos *Usuário* e *Senha* não serão salvos ou carregados de nenhum lugar, apenas serão processados e, se forem válidos, o botão *Entrar* levará o usuário a tela de notas. 
 
