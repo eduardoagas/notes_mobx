@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:notes_mobx/dialogs/show_message.dart';
 import 'package:notes_mobx/views/notes/notes_view.dart';
-import 'package:notes_mobx/views/webview/goog_view.dart';
+import 'package:notes_mobx/views/privacy/goog_view.dart';
 import 'package:provider/provider.dart';
 import 'loading/loading_screen.dart';
 import 'state/app_state.dart';

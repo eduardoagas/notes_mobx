@@ -39,7 +39,10 @@ class GoogleView extends StatelessWidget {
             context.read<AppState>().currentScreen =
                 context.read<AppState>().lastScreen;
           },
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.grey[200],
+          ),
         ),
         backgroundColor: const Color.fromARGB(255, 2, 37, 22),
       ),

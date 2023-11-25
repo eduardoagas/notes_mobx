@@ -154,6 +154,7 @@ abstract class _AppState with Store {
 
   @action
   void goToNotes() {
+    enter = false;
     currentScreen = AppScreen.notes;
   }
 
