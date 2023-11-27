@@ -1,6 +1,6 @@
 # Notas em MobX!
 
-Este aplicativo foi desenvolvido seguindo os requisitos da prova do processo seletivo para a vaga de desenvolvedor Flutter. Ele foi testado num dispositivo físico e num dipositivo emulado, ambos Android.
+Este aplicativo foi desenvolvido seguindo os requisitos da prova do processo seletivo para a vaga de desenvolvedor Flutter. Ele foi testado num dispositivo físico e num dipositivo emulado, ambos Android e no simulador de IOS.
 
 
 # Tela de login
