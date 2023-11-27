@@ -40,7 +40,7 @@ Escrever algo no campo de *"Digite seu texto"* e então apertar *"Enter"* no tec
     <img src="images/notes_edit3.png" alt="Your Image" width="196" height="390">
 </p>
 
-**Clicar no ícone de edição** logo ao lado do texto da nota trará o texto da mesma para o campo de digitação. Enquanto estiver em modo de edição o ícone ao lado do texto sendo editado estará da **cor verde** na lista de notas. **Clicar novamente no ícone cancela o modo de edição.** Selecionar "Enter" no teclado termina a edição e salva o texto editado,, trazendo a nota para o topo da lista.
+**Clicar no ícone de edição** logo ao lado do texto da nota trará o texto da mesma para o campo de digitação. Enquanto estiver em modo de edição o ícone ao lado do texto sendo editado estará da **cor verde** na lista de notas. **Clicar novamente no ícone cancela o modo de edição.** Selecionar "Enter" no teclado termina a edição e salva o texto editado, trazendo a nota para o topo da lista.
 
 ## Deletar uma nota
 
