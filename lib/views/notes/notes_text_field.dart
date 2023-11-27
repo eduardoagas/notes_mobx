@@ -26,10 +26,9 @@ class NotesTextField extends StatelessWidget {
         onSubmitted: (event) async {
           context.read<AppState>().enter = false;
           if (noteController.text.isNotEmpty) {
-            await context
-                .read<AppState>()
-                .createOrEditNote(noteController.text);
+            final str = noteController.text;
             noteController.clear();
+            await context.read<AppState>().createOrEditNote(str);
           }
         },
         style: TextStyle(
