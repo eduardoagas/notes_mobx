@@ -12,6 +12,7 @@ import 'note.dart';
 import 'package:uuid/uuid.dart';
 part 'app_state.g.dart';
 
+// ignore: library_private_types_in_public_api
 class AppState = _AppState with _$AppState;
 
 abstract class _AppState with Store {

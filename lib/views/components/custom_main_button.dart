@@ -9,12 +9,11 @@ class CustomMainButton extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onPressed;
   const CustomMainButton(
-      {Key? key,
+      {super.key,
       required this.child,
       required this.color,
       required this.isLoading,
-      required this.onPressed})
-      : super(key: key);
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
