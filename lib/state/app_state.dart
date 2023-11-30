@@ -195,7 +195,7 @@ abstract class _AppState with Store {
           status = 422;
           break;
         }
-        if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(string)) {
+        if (!RegExp(r'^[a-zA-Z0-9\s]+$').hasMatch(string)) {
           message =
               "Por favor preencha os campos sem o uso de caracteres especiais";
           status = 422;

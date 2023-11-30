@@ -14,7 +14,7 @@ class LoginView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userController = useTextEditingController(
-      text: 'user'.ifDebugging,
+      text: 'user9'.ifDebugging,
     );
     final passwordController = useTextEditingController(
       text: 'senha'.ifDebugging,
